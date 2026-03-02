@@ -2,14 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet'); // For improving security
 const morgan = require('morgan'); // For logging HTTP requests received by the server
-require('dotenv').config();
+require('dotenv').config();       // Configures a .env file 
 
 /*const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
 const sequelize = require('./models');*/
 
 const app = express();
-const PORT = 3000;  // change port if required 
+const PORT = process.env.port;  // change port from .env file
 
 // Middleware
 app.use(helmet());  // sets HTTP response headers
