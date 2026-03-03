@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const posts = await Post.findAll({
-      include: [{ model: require('./models'), as: 'author' }],
+      include: [{ {User}: require('./models'), as: 'author' }],
       order: [['createdAt', 'DESC']]
     });
     res.json(posts);
@@ -23,7 +23,7 @@ router.post('/', auth, async (req, res) => {
       ...req.body,
       authorId: req.user.id
     });
-    await post.reload({ include: [{ model: require('./models'), as: 'author' }] });
+    await post.reload({ include: [{ {User}: require('./models'), as: 'author' }] });
     res.status(201).json(post);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -35,8 +35,8 @@ router.get('/:id', async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id, {
       include: [
-        { model: require('./models'), as: 'author' },
-        { model: require('./models'), as: 'comments', 
+        { {User}: require('./models'), as: 'author' },
+        { {Comment}: require('./models'), as: 'comments', 
           include: [{ model: require('./models'), as: 'author' }] }
       ]
     });
@@ -54,7 +54,7 @@ router.put('/:id', auth, async (req, res) => {
     if (!post) return res.status(404).json({ error: 'Post not found or unauthorized' });
     
     await post.update(req.body);
-    await post.reload({ include: [{ model: require('./models'), as: 'author' }] });
+    await post.reload({ include: [{ {User}: require('./models'), as: 'author' }] });
     res.json(post);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -83,8 +83,8 @@ router.post('/:id/comments', auth, async (req, res) => {
     });
     await comment.reload({
       include: [
-        { model: require('./models'), as: 'author' },
-        { model: require('./models') }
+        { {User}: require('./models'), as: 'author' },
+        { {Post}: require('./models') }
       ]
     });
     res.status(201).json(comment);
