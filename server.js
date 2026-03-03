@@ -6,7 +6,7 @@ require('dotenv').config();       // Configures a .env file
 
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
-const sequelize = require('./models');
+const {sequelize} = require('./models');
 
 const app = express();
 const PORT = process.env.port;  // change port from .env file
